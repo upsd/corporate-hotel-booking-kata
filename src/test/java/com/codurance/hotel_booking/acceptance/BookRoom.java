@@ -32,6 +32,7 @@ class BookRoom {
         HotelService hotelService = aHotelService().build();
         hotelService.setRoomType(HOTEL_ID, ROOM_TYPE, QUANTITY);
         BookingPolicyService bookingPolicyService = aBookingPolicyService().build();
+        bookingPolicyService.setEmployeePolicy(EMPLOYEE_ID, ROOM_TYPE);
         LocalDate checkInDate = LocalDate.of(2019, 02, 1);
         BookingService bookingService = aBookingService()
                 .withCompanyService(companyService)
