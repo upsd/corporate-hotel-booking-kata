@@ -1,6 +1,9 @@
 package com.codurance.hotel_booking.acceptance;
 
 import com.codurance.hotel_booking.booking.Booking;
+import com.codurance.hotel_booking.booking.BookingService;
+import com.codurance.hotel_booking.company.CompanyService;
+import com.codurance.hotel_booking.hotel.HotelService;
 import com.codurance.hotel_booking.hotel.Room;
 import org.junit.jupiter.api.Test;
 
@@ -22,11 +25,17 @@ class BookRoom {
 
     @Test
     void when_there_are_no_constraints() {
-        aCompanyService().build().addEmployee(COMPANY_ID, EMPLOYEE_ID);
-        aHotelService().build().setRoomType(HOTEL_ID, ROOM_TYPE, QUANTITY);
+        CompanyService companyService = aCompanyService().build();
+        companyService.addEmployee(COMPANY_ID, EMPLOYEE_ID);
+        HotelService hotelService = aHotelService().build();
+        hotelService.setRoomType(HOTEL_ID, ROOM_TYPE, QUANTITY);
         LocalDate checkInDate = LocalDate.of(2019, 02, 1);
+        BookingService bookingService = aBookingService()
+                .withCompanyService(companyService)
+                .withHotelService(hotelService)
+                .build();
 
-        Booking booking = aBookingService().build().book(EMPLOYEE_ID, HOTEL_ID, ROOM_TYPE, checkInDate, checkInDate.plusDays(1));
+        Booking booking = bookingService.book(EMPLOYEE_ID, HOTEL_ID, ROOM_TYPE, checkInDate, checkInDate.plusDays(1));
 
         Booking successfulBooking = aBooking()
                 .withSuccess()
