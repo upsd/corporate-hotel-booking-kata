@@ -2,6 +2,7 @@ package com.codurance.hotel_booking.acceptance;
 
 import com.codurance.hotel_booking.booking.Booking;
 import com.codurance.hotel_booking.booking.BookingService;
+import com.codurance.hotel_booking.booking_policy.BookingPolicyService;
 import com.codurance.hotel_booking.company.CompanyService;
 import com.codurance.hotel_booking.hotel.HotelService;
 import com.codurance.hotel_booking.hotel.Room;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 
 import static com.codurance.hotel_booking.booking.Booking.aBooking;
 import static com.codurance.hotel_booking.booking.BookingService.aBookingService;
+import static com.codurance.hotel_booking.booking_policy.BookingPolicyService.aBookingPolicyService;
 import static com.codurance.hotel_booking.company.CompanyService.aCompanyService;
 import static com.codurance.hotel_booking.hotel.HotelService.aHotelService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,10 +31,12 @@ class BookRoom {
         companyService.addEmployee(COMPANY_ID, EMPLOYEE_ID);
         HotelService hotelService = aHotelService().build();
         hotelService.setRoomType(HOTEL_ID, ROOM_TYPE, QUANTITY);
+        BookingPolicyService bookingPolicyService = aBookingPolicyService().build();
         LocalDate checkInDate = LocalDate.of(2019, 02, 1);
         BookingService bookingService = aBookingService()
                 .withCompanyService(companyService)
                 .withHotelService(hotelService)
+                .withBookingPolicyService(bookingPolicyService)
                 .build();
 
         Booking booking = bookingService.book(EMPLOYEE_ID, HOTEL_ID, ROOM_TYPE, checkInDate, checkInDate.plusDays(1));
